@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User List</title>
+</head>
+
+<body>
+
+<h1>User List</h1>
+
+<input id="search" placeholder="Search users">
+<button onclick="searchUser()">Search</button>
+
+<ul id="userList"></ul>
+
+<script>
+    const users = ["Arbnor", "Lazi", "John", "Alice"];
+
+    function renderUsers(list) {
+        const ul = document.getElementById("userList");
+        ul.innerHTML = "";
+
+        list.map(user => {
+            ul.innerHTML += "<li>" + user + "</li>"; // ❌ XSS risk
+        });
+    }
+
+    function searchUser() {
+        let input = document.getElementById("search").value;
+
+        if(input = "") { // ❌ assignment instead of comparison
+            alert("Empty input");
+        }
+
+        const result = users.filter(user => {
+            return user.toLowerCase().includes(input); // ❌ case mismatch
+        });
+
+        renderUsers(result);
+    }
+
+    window.onload = renderUsers(users); // ❌ executed immediately instead of function reference
+</script>
+
+</body>
+</html>
